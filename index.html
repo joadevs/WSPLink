@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>WSPLink - Iniciar sesión</title>
+<style>
+  :root{
+    --bg1:#0B2545;
+    --bg2:#13315C;
+    --card:#ffffff;
+    --accent:#0B2545;
+    --muted:#6b7280;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .contenedor{
+    width:100%;
+    max-width:420px;
+    background:var(--card);
+    color:var(--accent);
+    padding:36px;
+    border-radius:14px;
+    box-shadow:0 12px 30px rgba(2,6,23,0.45);
+    text-align:center;
+  }
+
+  .brand{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:18px;
+  }
+  .logo {
+    width:48px;
+    height:48px;
+    border-radius:10px;
+    background:linear-gradient(180deg,#0B2545,#2a5079);
+    display:grid;
+    place-items:center;
+    color:white;
+    font-weight:700;
+    font-size:18px;
+    box-shadow:0 6px 18px rgba(11,37,69,0.35);
+  }
+  h1{
+    margin:0;
+    font-size:20px;
+    letter-spacing:0.3px;
+  }
+  p.lead{
+    color:var(--muted);
+    margin:10px 0 22px;
+    font-size:14px;
+  }
+
+  form{
+    display:grid;
+    gap:12px;
+    text-align:left;
+  }
+
+  label{
+    font-size:13px;
+    color:#374151;
+    display:block;
+    margin-bottom:6px;
+  }
+
+  input[type="text"],
+  input[type="password"]{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid #e6e8eb;
+    font-size:15px;
+  }
+  input[type="text"]:focus,
+  input[type="password"]:focus{
+    outline:none;
+    box-shadow:0 6px 18px rgba(11,37,69,0.12);
+    border-color:var(--accent);
+  }
+
+  .btn-login{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:0;
+    background:var(--accent);
+    color:white;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-login:active{ transform:translateY(1px) }
+  .btn-login:hover{ box-shadow:0 10px 22px rgba(11,37,69,0.18) }
+
+  .msg{
+    margin-top:6px;
+    font-size:13px;
+    color:#b91c1c;
+    min-height:18px;
+  }
+
+  .muted-row{
+    margin-top:14px;
+    font-size:13px;
+    color:var(--muted);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .muted-row a{ color:var(--accent); text-decoration:none }
+  @media (max-width:420px){
+    .contenedor{ padding:24px; border-radius:12px }
+  }
+</style>
+</head>
+<body>
+  <div class="contenedor" role="main" aria-labelledby="titulo">
+    <div class="brand" aria-hidden="true">
+      <div class="logo">W</div>
+      <h1 id="titulo">WSPLink</h1>
+    </div>
+
+    <p class="lead">Ingresa tus credenciales para continuar</p>
+
+    <form id="loginForm" autocomplete="on" novalidate>
+      <div>
+        <label for="user">Nombre de Usuario</label>
+        <input id="user" name="usuario" type="text" placeholder="Nombre de Usuario" required />
+      </div>
+
+      <div>
+        <label for="pass">Contraseña</label>
+        <input id="pass" name="password" type="password" placeholder="Ingrese Contraseña" required />
+      </div>
+
+      <div>
+        <button type="submit" class="btn-login">Iniciar Sesión</button>
+      </div>
+
+      <div class="msg" id="msg" aria-live="polite"></div>
+
+      <div class="muted-row">
+        <span>¿Olvidaste tu contraseña?</span>
+        <a href="#" onclick="alert('Función de recuperar no implementada en demo');return false;">Recuperarla</a>
+      </div>
+    </form>
+  </div>
+
+<script>
+  (function(){
+    // Credenciales válidas (solo demo)
+    const VALID_USER = 'joaquin gimenez';
+    const VALID_PASS = '123';
+
+    const form = document.getElementById('loginForm');
+    const msg = document.getElementById('msg');
+    const inputUser = document.getElementById('user');
+    const inputPass = document.getElementById('pass');
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      msg.textContent = '';
+
+      const user = inputUser.value.trim().toLowerCase();
+      const pass = inputPass.value;
+
+      if(!user || !pass){
+        msg.textContent = 'Por favor completá ambos campos.';
+        return;
+      }
+
+      // Validación simple - coincide exactamente con los valores requeridos
+      if(user === VALID_USER && pass === VALID_PASS){
+        // marcar sesión en sessionStorage para proteger dashboard
+        sessionStorage.setItem('wsp_logged', '1');
+        sessionStorage.setItem('wsp_user', inputUser.value.trim());
+        // redirigir a la página destino
+        window.location.href = 'home/dashboard.html';
+      } else {
+        msg.textContent = 'Usuario o contraseña incorrectos.';
+        // pequeña animación de "shake"
+        const c = document.querySelector('.contenedor');
+        c.style.transition = 'transform .08s';
+        c.style.transform = 'translateX(-8px)';
+        setTimeout(()=> c.style.transform = 'translateX(8px)', 80);
+        setTimeout(()=> c.style.transform = 'translateX(0)', 160);
+      }
+    });
+
+    // permitir enviar con Enter si ambos campos están completos
+    inputPass.addEventListener('keydown', function(e){
+      if(e.key === 'Enter') form.dispatchEvent(new Event('submit', {cancelable:true, bubbles:true}));
+    });
+  })();
+</script>
+</body>
+</html>
