@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cargar Afinidad - Sistema de Comunicación</title>
+  <style>
+     :root {
+        --color-principal: #0B2545;
+        --color-secundario: #13315C;
+        --color-fondo: #f5f7fa;
+        --color-blanco: #fff;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        background: var(--color-fondo);
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* ===== MENU LATERAL ===== */
+    .sidebar {
+        width: 250px;
+        background: var(--color-principal);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .sidebar h2 {
+        margin-bottom: 40px;
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+    }
+
+    .menu a {
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        color: #fff;
+        padding: 15px 30px;
+        text-align: left;
+        transition: 0.3s;
+        font-weight: 500;
+    }
+
+    .menu a:hover, .menu a.active {
+        background: var(--color-secundario);
+    }
+
+    /* ===== CONTENIDO PRINCIPAL ===== */
+    .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        transition: margin-left 0.3s ease;
+    }
+
+    .header {
+        background: var(--color-blanco);
+        padding: 15px 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .header h1 {
+        font-size: 1.4rem;
+        color: var(--color-principal);
+        margin: 0;
+    }
+
+    .header span {
+        color: #555;
+        font-size: 0.9rem;
+    }
+
+    .menu-btn {
+        display: none;
+        font-size: 1.6rem;
+        background: none;
+        border: none;
+        color: var(--color-principal);
+        cursor: pointer;
+    }
+.container {
+  width: 80%;
+  max-width: 500px;
+  height: 456px; /* Ajusta según necesites */
+  background: white;
+  border-radius: 12px;
+
+  margin: 0 auto;
+  display: flex;          /* Necesario para centrar contenido */
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  padding: 20px;          /* Opcional, para que el contenido respire */
+}
+
+
+
+.btn-volver {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.btn-volver:hover {
+  opacity: 1;
+}
+
+.main2 {
+  padding: 25px;
+}
+
+.label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #0b2545;
+}
+
+.input,
+.textarea,
+.input-file,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.input:focus,
+.textarea:focus,
+select:focus {
+  border-color: #0b2545;
+  outline: none;
+  background-color: #fff;
+}
+
+.textarea {
+  height: 120px;
+  resize: none;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.btn-principal,
+.btn-secundario {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-principal {
+  background-color: #0b2545;
+  color: white;
+}
+
+.btn-principal:hover {
+  background-color: #133f73;
+}
+
+.btn-secundario {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.btn-secundario:hover {
+  background-color: #d6d6d6;
+}
+
+/* 📱 Responsive */
+@media (max-width: 600px) {
+  .header h1 {
+    font-size: 1.3rem;
+  }
+  .acciones {
+    flex-direction: column;
+  }
+  .btn-principal,
+  .btn-secundario {
+    width: 100%;
+  }
+}
+  /* ===== RESPONSIVE ===== */
+    @media (max-width: 1000px) {
+        .content {
+            grid-template-columns: 1fr;
+            padding: 20px;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            height: 100vh;
+            z-index: 999;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .menu-btn {
+            display: block;
+        }
+
+        .main {
+            width: 100%;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 998;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    }
+    /* Sobrescribir active en responsive */
+@media (max-width: 1000px) {
+    .menu a.active {
+        background: none;
+        color: #fff; /* o el color que uses normalmente */
+    }
+}
+
+  </style>
+</head>
+
+<body>
+     <div class="sidebar" id="sidebar">
+        <h2>WSPLink</h2>
+        <div class="menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="Cargar Afinidad.html">Cargar Afinidad</a>
+            <a href="#"  class="active">Enviar Flyers</a>
+            <a href="Historial.html">Historial</a>
+            <a href="#">Configuración</a>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="main">
+        <div class="header">
+            <button class="menu-btn" id="menu-btn">☰</button>
+            <h1>Enviar FLyers</h1>
+            <span>Usuario: Joaquin Gimenez</span>
+        </div>
+
+        <div class="content">
+          <br>
+           <div class="container">
+   
+    <main class="main2">
+      <br>
+      <form class="flyer-form">
+        <label for="numero" class="label">Seleccionar número de envío:</label>
+        <select id="numero" name="numero" class="input">
+          <option value="num1">Número 1 - +54 9 11 2345 6789</option>
+          <option value="num2">Número 2 - +54 9 11 9876 5432</option>
+        </select>
+
+        <label for="afinidad" class="label">Filtrar por afinidad:</label>
+        <input type="text" id="afinidad" name="afinidad" class="input" placeholder="Ej: Clientes VIP, Día de la Madre, etc.">
+
+        <label for="mensaje" class="label">Mensaje personalizado:</label>
+        <textarea id="mensaje" name="mensaje" class="textarea" placeholder="Escribí el mensaje para acompañar el flyer..."></textarea>
+
+        <label for="archivo" class="label">Subir flyer o PDF:</label>
+        <input type="file" id="archivo" name="archivo" class="input-file" accept=".jpg,.jpeg,.png,.pdf">
+
+        <div class="acciones">
+          <button type="submit" class="btn-principal">Enviar por WhatsApp 📲</button>
+        </div>
+        <br>
+      </form>
+    </main>
+  </div>
+                </div>
+<script>
+    // ===== Menú responsive =====
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+</script>
+</body>
+</html>

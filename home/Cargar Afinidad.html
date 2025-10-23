@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WSPLink - Cargar Afinidad</title>
+<style>
+    :root {
+        --color-principal: #0B2545;
+        --color-secundario: #13315C;
+        --color-fondo: #f5f7fa;
+        --color-blanco: #fff;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        background: var(--color-fondo);
+        display: flex;
+        min-height: 100vh;
+    }
+
+    /* ===== MENU LATERAL ===== */
+    .sidebar {
+        width: 250px;
+        background: var(--color-principal);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .sidebar h2 {
+        margin-bottom: 40px;
+        font-size: 1.4rem;
+    }
+
+    .menu a {
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        color: #fff;
+        padding: 15px 30px;
+        text-align: left;
+        transition: 0.3s;
+        font-weight: 500;
+    }
+
+    .menu a:hover, .menu a.active {
+        background: var(--color-secundario);
+    }
+
+    /* ===== CONTENIDO PRINCIPAL ===== */
+    .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .header {
+        background: var(--color-blanco);
+        padding: 15px 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .header h1 {
+        font-size: 1.4rem;
+        color: var(--color-principal);
+        margin: 0;
+    }
+
+    .menu-btn {
+        display: none;
+        font-size: 1.6rem;
+        background: none;
+        border: none;
+        color: var(--color-principal);
+        cursor: pointer;
+    }
+
+    .content {
+        padding: 30px;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 25px;
+    }
+
+    /* ===== TARJETAS ===== */
+    .card {
+        background: var(--color-blanco);
+        border-radius: 10px;
+        width: 80%;
+          max-width: 900px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        padding: 25px;
+        
+        transition: transform 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+    }
+
+    .card h3 {
+        color: var(--color-principal);
+        margin-bottom: 15px;
+    }
+
+    input[type="text"], input[type="tel"], select {
+        width: 90%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        margin-bottom: 12px;
+        transition: 0.3s;
+    }
+
+    input[type="text"]:focus, input[type="tel"]:focus, select:focus {
+        border-color: var(--color-principal);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(11,37,69,0.1);
+    }
+
+    button {
+        background: var(--color-principal);
+        color: #fff;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 8px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background: var(--color-secundario);
+    }
+
+    /* ===== TABLA ===== */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background: var(--color-principal);
+        color: white;
+    }
+
+    tr:hover {
+        background: #f0f4f9;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1000px) {
+        .content {
+            grid-template-columns: 1fr;
+            padding: 20px;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            height: 100vh;
+            z-index: 999;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .menu-btn {
+            display: block;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 998;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    }
+        /* Sobrescribir active en responsive */
+@media (max-width: 1000px) {
+    .menu a.active {
+        background: none;
+        color: #fff; /* o el color que uses normalmente */
+    }
+}
+</style>
+</head>
+<body>
+
+    <div class="sidebar" id="sidebar">
+        <h2>WSPLink</h2>
+        <div class="menu">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="#" class="active">Cargar Afinidad</a>
+            <a href="Enviar Flyers.html">Enviar Flyers</a>
+            <a href="">Historial</a>
+            <a href="#">Configuración</a>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="main">
+        <div class="header">
+            <button class="menu-btn" id="menu-btn">☰</button>
+            <h1>Cargar Afinidad</h1>
+            <span>Usuario: Joaquin Gimenez</span>
+        </div>
+
+        <div class="content">
+            <!-- Formulario -->
+            <div class="card">
+                <h3>Agregar nuevo contacto</h3>
+                <form id="formAfinidad">
+                    <input type="text" id="nombre" placeholder="Nombre" required>
+                    <input type="text" id="apellido" placeholder="Apellido" required>
+                    <input type="tel" id="telefono" placeholder="Teléfono" required>
+                    <select id="afinidad" required>
+                        <option value="">Seleccionar afinidad</option>
+                        <option value="Cliente">Cliente</option>
+                        <option value="Proveedor">Proveedor</option>
+                        <option value="Socio">Socio</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <button type="submit">Guardar</button>
+                </form>
+            </div>
+
+            <!-- Tabla -->
+            <div class="card">
+                <h3>Lista de Afinidades</h3>
+                <input type="text" id="buscar" placeholder="Buscar por nombre o teléfono" style="margin-bottom:15px;">
+                <table id="tablaAfinidades">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Teléfono</th>
+                            <th>Afinidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Filas generadas dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // ===== Menú responsive =====
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    // ===== Cargar Afinidad (Simulación Local) =====
+    const form = document.getElementById('formAfinidad');
+    const tabla = document.querySelector('#tablaAfinidades tbody');
+    const buscar = document.getElementById('buscar');
+    let contactos = [];
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const nuevo = {
+            nombre: nombre.value,
+            apellido: apellido.value,
+            telefono: telefono.value,
+            afinidad: afinidad.value
+        };
+        contactos.push(nuevo);
+        renderTabla();
+        form.reset();
+    });
+
+    buscar.addEventListener('input', renderTabla);
+
+    function renderTabla() {
+        const filtro = buscar.value.toLowerCase();
+        tabla.innerHTML = '';
+        contactos
+            .filter(c => c.nombre.toLowerCase().includes(filtro) || c.telefono.includes(filtro))
+            .forEach(c => {
+                const fila = `<tr>
+                    <td>${c.nombre}</td>
+                    <td>${c.apellido}</td>
+                    <td>${c.telefono}</td>
+                    <td>${c.afinidad}</td>
+                </tr>`;
+                tabla.innerHTML += fila;
+            });
+    }
+</script>
+</body>
+</html>

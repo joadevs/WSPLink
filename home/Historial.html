@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historial - Sistema de Comunicación</title>
+  <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Arimo", sans-serif;
+}
+ :root {
+        --color-principal: #0B2545;
+        --color-secundario: #13315C;
+        --color-fondo: #f5f7fa;
+        --color-blanco: #fff;
+    }
+
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        background: var(--color-fondo);
+        display: flex;
+        min-height: 100vh;
+    }
+.container {
+  width: 90%;
+  max-width: 900px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.header {
+  background: #0b2545;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.btn-volver {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.btn-volver:hover {
+  opacity: 1;
+}
+
+.main {
+  padding: 25px;
+}
+
+.filtros {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 300px;
+  font-size: 0.95rem;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.tabla thead {
+  background-color: #0b2545;
+  color: white;
+}
+
+.tabla th,
+.tabla td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.tabla tbody tr:hover {
+  background-color: #f3f7ff;
+}
+
+.estado {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.enviado {
+  background-color: #c8f7c5;
+  color: #256029;
+}
+
+.pendiente {
+  background-color: #ffe7b3;
+  color: #805300;
+}
+
+/* 📱 Responsive */
+@media (max-width: 700px) {
+  .tabla thead {
+    display: none;
+  }
+
+  .tabla tbody tr {
+    display: block;
+    margin-bottom: 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .tabla tbody td {
+    display: flex;
+    justify-content: space-between;
+    border: none;
+    padding: 6px 0;
+  }
+
+  .tabla tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #0b2545;
+  }
+}
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1000px) {
+        .content {
+            grid-template-columns: 1fr;
+            padding: 20px;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            height: 100vh;
+            z-index: 999;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .menu-btn {
+            display: block;
+        }
+
+        .main {
+            width: 100%;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 998;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    }
+    
+    /* ===== MENU LATERAL ===== */
+    .sidebar {
+        width: 250px;
+        background: var(--color-principal);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .sidebar h2 {
+        margin-bottom: 40px;
+        font-size: 1.4rem;
+        letter-spacing: 1px;
+    }
+
+    .menu a {
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        color: #fff;
+        padding: 15px 30px;
+        text-align: left;
+        transition: 0.3s;
+        font-weight: 500;
+    }
+
+    .menu a:hover, .menu a.active {
+        background: var(--color-secundario);
+    }
+
+    /* ===== CONTENIDO PRINCIPAL ===== */
+    .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        transition: margin-left 0.3s ease;
+    }
+
+    .header {
+        background: var(--color-blanco);
+        padding: 15px 25px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .header h1 {
+        font-size: 1.4rem;
+        color: var(--color-principal);
+        margin: 0;
+    }
+
+    .header span {
+        color: #555;
+        font-size: 0.9rem;
+    }
+
+    .menu-btn {
+        display: none;
+        font-size: 1.6rem;
+        background: none;
+        border: none;
+        color: var(--color-principal);
+        cursor: pointer;
+    }
+
+    .content {
+        padding: 30px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+</style>
+</head>
+<body>
+     <div class="sidebar" id="sidebar">
+        <h2>WSPLink</h2>
+        <div class="menu">
+            <a href="#" class="active">Dashboard</a>
+            <a href="Cargar Afinidad.html">Cargar Afinidad</a>
+            <a href="Enviar Flyers.html">Enviar Flyers</a>
+            <a href="Historial.html">Historial</a>
+            <a href="#">Configuración</a>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+
+  <div class="container">
+    <header class="header">
+      <h1>📜 Historial de Envíos</h1>
+    </header>
+
+    <main class="main">
+      <div class="filtros">
+        <input type="text" id="buscar" placeholder="Buscar por afinidad o mensaje..." class="input">
+      </div>
+
+      <table class="tabla">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Número</th>
+            <th>Afinidad</th>
+            <th>Mensaje</th>
+            <th>Archivo</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-body">
+          <tr>
+            <td>17/10/2025 - 14:32</td>
+            <td>+54 9 11 2345 6789</td>
+            <td>Clientes VIP</td>
+            <td>💐 ¡Feliz Día de la Madre! Visitá nuestras promos 🌸</td>
+            <td>flyer_madres.pdf</td>
+            <td><span class="estado enviado">Enviado</span></td>
+          </tr>
+          <tr>
+            <td>16/10/2025 - 18:50</td>
+            <td>+54 9 11 9876 5432</td>
+            <td>Nuevo Cliente</td>
+            <td>🎉 Bienvenido a nuestra comunidad</td>
+            <td>bienvenida.jpg</td>
+            <td><span class="estado pendiente">Pendiente</span></td>
+          </tr>
+          <tr>
+            <td>15/10/2025 - 10:15</td>
+            <td>+54 9 11 2345 6789</td>
+            <td>Feliz Cumpleaños</td>
+            <td>🎂 ¡Te deseamos un excelente día!</td>
+            <td>cumple.pdf</td>
+            <td><span class="estado enviado">Enviado</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+  <script>
+  // 🔍 Filtrado simple por texto
+  const buscar = document.getElementById("buscar");
+  const filas = document.querySelectorAll("#tabla-body tr");
+
+  buscar.addEventListener("keyup", () => {
+    const texto = buscar.value.toLowerCase();
+    filas.forEach(fila => {
+      const coincide = fila.innerText.toLowerCase().includes(texto);
+      fila.style.display = coincide ? "" : "none";
+    });
+  });
+    // ===== Menú responsive =====
+    const menuBtn = document.getElementById('menu-btn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    menuBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
